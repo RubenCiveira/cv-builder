@@ -1,0 +1,16 @@
+/* Tipografía y jerarquía */
+h1{font-weight:700; letter-spacing:.2px}
+h2{border-bottom:2px solid #eee; padding-bottom:4px}
+h3{color:#333}
+
+/* Enlaces */
+a{color:#0b5ed7; text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* Detalles/summary (bloques colapsables) */
+details{border:1px solid #eee; border-radius:6px; padding:.5rem .75rem; background:#fafafa}
+summary{font-weight:600}
+
+/* Tablas */
+table{width:100%}
+th{background:#f4f4f4; text-align:left}

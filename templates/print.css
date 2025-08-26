@@ -1,0 +1,7 @@
+body { font-family: "Cambria", serif; font-size: 11pt; color: #000; }
+h1 { font-size: 18pt; border-bottom: 2px solid #000; }
+h2 { font-size: 13pt; margin-top: 1.2em; }
+h3 { font-size: 11pt; }
+a { color: black; text-decoration: none; }
+@page { margin: 15mm; }
+summary { color: black; }

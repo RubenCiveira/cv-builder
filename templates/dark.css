@@ -1,0 +1,6 @@
+body { font-family: "Segoe UI", sans-serif; font-size: 11pt; background: #111; color: #eee; }
+h1, h2, h3 { color: #f0f0f0; }
+h1 { font-size: 20pt; border-bottom: 2px solid #444; }
+h2 { font-size: 14pt; color: #bbb; }
+a { color: #58a6ff; }
+summary { color: #58a6ff; cursor: pointer; }

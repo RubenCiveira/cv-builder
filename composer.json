@@ -1,0 +1,26 @@
+{
+  "name": "ruben.civeiraiglesia/cerridoc-api",
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "bin": [
+    "binary/install"
+  ],
+  "autoload": {
+    "psr-4": {
+      "App\\": "src/"
+    }
+  },
+  "authors": [
+    {
+      "name": "Ruben civeira",
+      "email": "ruben.civeira@gmail.com"
+    }
+  ],
+  "require": {
+   "slim/slim": "^4.14",
+    "slim/psr7": "^1.7",
+    "guzzlehttp/guzzle": "^7.9",
+    "league/commonmark": "^2.7",
+    "mpdf/mpdf": "^8.2"
+  }
+}
