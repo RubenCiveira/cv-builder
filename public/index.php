@@ -37,7 +37,7 @@ $app->get('/', function (Request $req, Response $res): Response {
                 .'<li>- ES HTML <a href="./es/small/'.htmlspecialchars($t).'/html" target="_blank">Ver compacto</a>, <a href="./es/full/'.htmlspecialchars($t).'/html" target="_blank">Ver completo</a></li>'
                 .'<li>- ES PDF <a href="./es/small/'.htmlspecialchars($t).'/pdf" target="_blank">Descargar compacto</a>, <a href="./es/full/'.htmlspecialchars($t).'/pdf" target="_blank">Descargar completo</a></li>'
                 .'<li>- EN HTML <a href="./en/small/'.htmlspecialchars($t).'/html" target="_blank">Ver compacto</a>, <a href="./en/full/'.htmlspecialchars($t).'/html" target="_blank">Ver completo</a></li>'
-                .'<li>- ES HTML <a href="./en/small/'.htmlspecialchars($t).'/html" target="_blank">Ver compacto</a>, <a href="./en/full/'.htmlspecialchars($t).'/html" target="_blank">Ver completo</a></li>'
+                .'<li>- ES PDF <a href="./en/small/'.htmlspecialchars($t).'/pdf" target="_blank">Ver compacto</a>, <a href="./en/full/'.htmlspecialchars($t).'/pdf" target="_blank">Ver completo</a></li>'
                 .'</ul></li>';
         }
         $html .= '</ul>';
