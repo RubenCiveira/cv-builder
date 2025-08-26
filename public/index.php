@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 use App\Renderer;
@@ -15,7 +16,7 @@ $app->setBasePath($basePath);
 
 
 // Ruta raíz: lista de templates disponibles
-$app->get('/', function(Request $req, Response $res): Response {
+$app->get('/', function (Request $req, Response $res): Response {
     $renderer = new Renderer();
     $templates = $renderer->listTemplates();
 
@@ -33,8 +34,10 @@ $app->get('/', function(Request $req, Response $res): Response {
         $html .= '<ul>';
         foreach ($templates as $t) {
             $html .= '<li><code>'.$t.'</code> <ul>'
-                .'<li>- HTML <a href="./small/'.htmlspecialchars($t).'/html" target="_blank">Ver compacto</a>, <a href="./full/'.htmlspecialchars($t).'/html" target="_blank">Ver completo</a></li>'
-                .'<li>- PDF <a href="./small/'.htmlspecialchars($t).'/pdf" target="_blank">Descargar compacto</a>, <a href="./full/'.htmlspecialchars($t).'/pdf" target="_blank">Descargar completo</a></li>'
+                .'<li>- ES HTML <a href="./es/small/'.htmlspecialchars($t).'/html" target="_blank">Ver compacto</a>, <a href="./es/full/'.htmlspecialchars($t).'/html" target="_blank">Ver completo</a></li>'
+                .'<li>- ES PDF <a href="./es/small/'.htmlspecialchars($t).'/pdf" target="_blank">Descargar compacto</a>, <a href="./es/full/'.htmlspecialchars($t).'/pdf" target="_blank">Descargar completo</a></li>'
+                .'<li>- EN HTML <a href="./en/small/'.htmlspecialchars($t).'/html" target="_blank">Ver compacto</a>, <a href="./en/full/'.htmlspecialchars($t).'/html" target="_blank">Ver completo</a></li>'
+                .'<li>- ES HTML <a href="./en/small/'.htmlspecialchars($t).'/html" target="_blank">Ver compacto</a>, <a href="./en/full/'.htmlspecialchars($t).'/html" target="_blank">Ver completo</a></li>'
                 .'</ul></li>';
         }
         $html .= '</ul>';
@@ -48,13 +51,16 @@ $app->get('/', function(Request $req, Response $res): Response {
 });
 
 // Ruta PDF: /{template}/pdf → genera el PDF con el CSS de ese template (si existe) o sin template
-$app->get('/small/{template}/pdf', function(Request $req, Response $res, array $args): Response {
+$app->get('/{lang}/small/{template}/pdf', function (Request $req, Response $res, array $args): Response {
     try {
-        $pdf = Renderer::toPdf( $args['template'] ?? null, false);
+        $lang = $args['lang'] ?? 'es'; // por defecto castellano
+        $contentLanguage = ($lang === 'en') ? 'en-EN' : 'es-ES';
+        $pdf = Renderer::toPdf($args['template'] ?? null, false, url($args));
         $filename = 'CV_RubenCiveira.pdf';
         $res->getBody()->write($pdf);
         return $res
             ->withHeader('Content-Type', 'application/pdf')
+             ->withHeader('Content-Language', $contentLanguage)
             ->withHeader('Content-Disposition', 'inline; filename="'.$filename.'"');
     } catch (\Throwable $e) {
         $res->getBody()->write('Error descargando Markdown: ' . $e->getMessage());
@@ -63,13 +69,16 @@ $app->get('/small/{template}/pdf', function(Request $req, Response $res, array $
 });
 
 // Ruta opcional para ver el HTML renderizado (útil depurar)
-$app->get('/full/{template}/pdf', function(Request $req, Response $res, array $args): Response {
+$app->get('/{lang}/full/{template}/pdf', function (Request $req, Response $res, array $args): Response {
     try {
-        $pdf = Renderer::toPdf( $args['template'] ?? null, true);
+        $lang = $args['lang'] ?? 'es'; // por defecto castellano
+        $contentLanguage = ($lang === 'en') ? 'en-EN' : 'es-ES';
+        $pdf = Renderer::toPdf($args['template'] ?? null, true, url($args));
         $filename = 'CV_RubenCiveira.pdf';
         $res->getBody()->write($pdf);
         return $res
             ->withHeader('Content-Type', 'application/pdf')
+             ->withHeader('Content-Language', $contentLanguage)
             ->withHeader('Content-Disposition', 'inline; filename="'.$filename.'"');
     } catch (\Throwable $e) {
         $res->getBody()->write('Error descargando Markdown: ' . $e->getMessage());
@@ -78,11 +87,15 @@ $app->get('/full/{template}/pdf', function(Request $req, Response $res, array $a
 });
 
 // Ruta PDF "full": renderiza el markdown completo
-$app->get('/small/{template}/html', function(Request $req, Response $res, array $args): Response {
-        try {
-        $html = Renderer::toHtml( $args['template'] ?? null, false);
+$app->get('/{lang}/small/{template}/html', function (Request $req, Response $res, array $args): Response {
+    try {
+        $lang = $args['lang'] ?? 'es'; // por defecto castellano
+        $contentLanguage = ($lang === 'en') ? 'en-EN' : 'es-ES';
+        $html = Renderer::toHtml($args['template'] ?? null, false, url($args));
         $res->getBody()->write($html);
-        return $res->withHeader('Content-Type', 'text/html; charset=utf-8');
+        return $res
+            ->withHeader('Content-Language', $contentLanguage)
+            ->withHeader('Content-Type', 'text/html; charset=utf-8');
     } catch (\Throwable $e) {
         $res->getBody()->write('Error descargando Markdown: ' . $e->getMessage());
         return $res->withStatus(502);
@@ -91,11 +104,15 @@ $app->get('/small/{template}/html', function(Request $req, Response $res, array 
 });
 
 // Ruta PDF "small": elimina los bloques <details>
-$app->get('/full/{template}/html', function(Request $req, Response $res, array $args): Response {
+$app->get('/{lang}/full/{template}/html', function (Request $req, Response $res, array $args): Response {
     try {
-        $html = Renderer::toHtml( $args['template'] ?? null, true);
+        $lang = $args['lang'] ?? 'es'; // por defecto castellano
+        $contentLanguage = ($lang === 'en') ? 'en-EN' : 'es-ES';
+        $html = Renderer::toHtml($args['template'] ?? null, true, url($args));
         $res->getBody()->write($html);
-        return $res->withHeader('Content-Type', 'text/html; charset=utf-8');
+        return $res
+            ->withHeader('Content-Language', $contentLanguage)
+            ->withHeader('Content-Type', 'text/html; charset=utf-8');
     } catch (\Throwable $e) {
         $res->getBody()->write('Error descargando Markdown: ' . $e->getMessage());
         return $res->withStatus(502);
@@ -104,3 +121,9 @@ $app->get('/full/{template}/html', function(Request $req, Response $res, array $
 
 
 $app->run();
+
+function url(array $args)
+{
+    $lang = $args['lang'] ?? 'es';
+    return 'https://raw.githubusercontent.com/RubenCiveira/RubenCiveira/main/' . ($lang === 'en' ? 'README.en.md' : 'README.md');
+}
